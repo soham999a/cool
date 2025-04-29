@@ -1,4 +1,4 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import Layout from '../components/layout/Layout';
@@ -130,11 +130,11 @@ const HomePage = () => {
               Manage your organization efficiently with our modern dashboard
             </p>
             <div className="d-flex flex-wrap gap-2 justify-content-center">
-              <Button as={Link} to="/login" className="btn-gradient-primary btn-lg px-4 me-md-2">
+              <Button onClick={() => navigate('/login')} className="btn-gradient-primary btn-lg px-4 me-md-2">
                 <i className="bi bi-box-arrow-in-right me-2"></i>
                 Login
               </Button>
-              <Button as={Link} to="/signup" variant="outline-light" className="btn-lg px-4">
+              <Button onClick={() => navigate('/signup')} variant="outline-light" className="btn-lg px-4">
                 <i className="bi bi-person-plus me-2"></i>
                 Sign Up
               </Button>
@@ -215,7 +215,7 @@ const HomePage = () => {
           <Card.Body className="p-5">
             <h2 className="fw-bold mb-3">Ready to get started?</h2>
             <p className="text-muted mb-4">Join thousands of organizations that use CoolMember to manage their members efficiently.</p>
-            <Button as={Link} to="/signup" className="btn-gradient-primary btn-lg px-5">
+            <Button onClick={() => navigate('/signup')} className="btn-gradient-primary btn-lg px-5">
               <i className="bi bi-person-plus me-2"></i>
               Sign Up Now
             </Button>

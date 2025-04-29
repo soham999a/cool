@@ -23,7 +23,6 @@ const MemberActivityChart: React.FC<MemberActivityChartProps> = ({ members }) =>
       const now = new Date();
       for (let i = 5; i >= 0; i--) {
         const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const monthKey = `${month.getFullYear()}-${month.getMonth() + 1}`;
         // Use abbreviated month format to save space
         const monthStr = month.toLocaleDateString('en-US', { month: 'short' }).substring(0, 3);
         const yearStr = month.getFullYear().toString().substring(2);
@@ -79,7 +78,7 @@ const MemberActivityChart: React.FC<MemberActivityChartProps> = ({ members }) =>
 
         {/* Chart content */}
         <div className="flex-1 flex items-end">
-          {monthlyData.map((data, index) => {
+          {monthlyData.map((data) => {
             const height = (data.count / maxCount) * 100;
             const isHighest = data.count === maxCount && maxCount > 0;
 

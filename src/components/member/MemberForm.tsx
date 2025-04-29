@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
+import { Form, Button, InputGroup, Card, Row, Col } from 'react-bootstrap';
 import { Member } from '../../types';
-import Input3D from '../3d/Input3D';
-import Button3D from '../3d/Button3D';
 
 interface MemberFormProps {
   initialData?: Member;
@@ -64,157 +62,169 @@ const MemberForm = ({ initialData, onSubmit, onCancel }: MemberFormProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="relative glass-effect p-8 max-w-2xl mx-auto"
-      style={{
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
-        transform: 'perspective(1000px) rotateX(1deg)',
-        transformStyle: 'preserve-3d',
-      }}
     >
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-xl"></div>
-      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/10 rounded-full blur-xl"></div>
-
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h2 className="text-2xl font-bold text-white">
-            {initialData ? 'Edit Member' : 'Add New Member'}
-          </h2>
-          <p className="text-gray-400 text-sm mt-1">
-            {initialData ? 'Update member information' : 'Enter member details to add to the system'}
-          </p>
-        </div>
-        <button
-          onClick={onCancel}
-          className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors"
-        >
-          <FiX className="text-gray-300" />
-        </button>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Name field */}
-        <Input3D
-          id="name"
-          name="name"
-          label="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="John Doe"
-          required
-          error={errors.name}
-          icon="person"
-        />
-
-        {/* Phone Number field */}
-        <Input3D
-          id="phoneNumber"
-          name="phoneNumber"
-          label="Phone Number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="+1 (123) 456-7890"
-          required
-          error={errors.phoneNumber}
-          icon="phone"
-        />
-
-        {/* Address field */}
-        <div className="relative">
-          <label className="block text-sm font-medium text-gray-300 mb-1">
-            Address
-            <span className="text-pink-500 ml-1">*</span>
-          </label>
-          <div className="relative border border-gray-600 rounded-lg overflow-hidden transition-all duration-200 bg-gray-800 shadow-md hover:shadow-lg">
-            <div className="flex items-center px-3">
-              <span className="material-icons text-indigo-400 mr-2">home</span>
-              <textarea
-                id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full py-3 px-1 outline-none bg-transparent text-gray-100 min-h-[80px] resize-none"
-                placeholder="123 Main St, City, Country"
-                required
-              />
-            </div>
-          </div>
-          {errors.address && (
-            <p className="text-red-400 text-xs mt-1 flex items-center">
-              <span className="material-icons text-xs mr-1">error</span>
-              {errors.address}
+      <Card className="card-glass border-0 shadow">
+        <Card.Header className="d-flex justify-content-between align-items-center border-bottom border-secondary">
+          <div>
+            <h4 className="fw-bold mb-0">
+              {initialData ? 'Edit Member' : 'Add New Member'}
+            </h4>
+            <p className="text-muted small mb-0">
+              {initialData ? 'Update member information' : 'Enter member details to add to the system'}
             </p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Member ID field */}
-          <Input3D
-            id="memberId"
-            name="memberId"
-            label="Member ID"
-            value={memberId}
-            onChange={(e) => setMemberId(e.target.value)}
-            placeholder="MEM-12345"
-            required
-            error={errors.memberId}
-            icon="badge"
-          />
-
-          {/* Blood Group field */}
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-300 mb-1">
-              Blood Group
-              <span className="text-pink-500 ml-1">*</span>
-            </label>
-            <div className="relative border border-gray-600 rounded-lg overflow-hidden transition-all duration-200 bg-gray-800 shadow-md hover:shadow-lg">
-              <div className="flex items-center px-3">
-                <span className="material-icons text-pink-500 mr-2">water_drop</span>
-                <select
-                  id="bloodGroup"
-                  value={bloodGroup}
-                  onChange={(e) => setBloodGroup(e.target.value)}
-                  className="w-full py-3 px-1 outline-none bg-transparent text-gray-100 appearance-none"
-                  required
-                >
-                  <option value="" className="bg-gray-800">Select Blood Group</option>
-                  {bloodGroups.map((group) => (
-                    <option key={group} value={group} className="bg-gray-800">
-                      {group}
-                    </option>
-                  ))}
-                </select>
-                <span className="material-icons text-indigo-400">arrow_drop_down</span>
-              </div>
-            </div>
-            {errors.bloodGroup && (
-              <p className="text-red-400 text-xs mt-1 flex items-center">
-                <span className="material-icons text-xs mr-1">error</span>
-                {errors.bloodGroup}
-              </p>
-            )}
           </div>
-        </div>
-
-        <div className="flex justify-end space-x-4 pt-6">
-          <Button3D
+          <Button
+            variant="close"
             onClick={onCancel}
-            color="secondary"
-            type="button"
-          >
-            Cancel
-          </Button3D>
+            className="bg-transparent text-light"
+            aria-label="Close"
+          />
+        </Card.Header>
 
-          <Button3D
-            onClick={() => {}}
-            color="primary"
-            icon="save"
-            type="submit"
-          >
-            {initialData ? 'Update' : 'Save'}
-          </Button3D>
-        </div>
-      </form>
+        <Card.Body>
+          <Form onSubmit={handleSubmit}>
+            {/* Name field */}
+            <Form.Group className="mb-3">
+              <Form.Label>Full Name</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>
+                  <i className="bi bi-person"></i>
+                </InputGroup.Text>
+                <Form.Control
+                  id="name"
+                  name="name"
+                  value={name}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                  placeholder="John Doe"
+                  required
+                  isInvalid={!!errors.name}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.name}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+
+            {/* Phone Number field */}
+            <Form.Group className="mb-3">
+              <Form.Label>Phone Number</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>
+                  <i className="bi bi-telephone"></i>
+                </InputGroup.Text>
+                <Form.Control
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)}
+                  placeholder="+1 (123) 456-7890"
+                  required
+                  isInvalid={!!errors.phoneNumber}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.phoneNumber}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+
+            {/* Address field */}
+            <Form.Group className="mb-3">
+              <Form.Label>Address</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>
+                  <i className="bi bi-house"></i>
+                </InputGroup.Text>
+                <Form.Control
+                  as="textarea"
+                  id="address"
+                  value={address}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
+                  placeholder="123 Main St, City, Country"
+                  required
+                  isInvalid={!!errors.address}
+                  style={{ minHeight: '80px' }}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.address}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+
+            <Row className="mb-3">
+              {/* Member ID field */}
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Member ID</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Text>
+                      <i className="bi bi-person-badge"></i>
+                    </InputGroup.Text>
+                    <Form.Control
+                      id="memberId"
+                      name="memberId"
+                      value={memberId}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMemberId(e.target.value)}
+                      placeholder="MEM-12345"
+                      required
+                      isInvalid={!!errors.memberId}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.memberId}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+
+              {/* Blood Group field */}
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Blood Group</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Text>
+                      <i className="bi bi-droplet-fill text-danger"></i>
+                    </InputGroup.Text>
+                    <Form.Select
+                      id="bloodGroup"
+                      value={bloodGroup}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setBloodGroup(e.target.value)}
+                      required
+                      isInvalid={!!errors.bloodGroup}
+                    >
+                      <option value="">Select Blood Group</option>
+                      {bloodGroups.map((group) => (
+                        <option key={group} value={group}>
+                          {group}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.bloodGroup}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <div className="d-flex justify-content-end gap-2 mt-4">
+              <Button
+                variant="secondary"
+                onClick={onCancel}
+                type="button"
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="primary"
+                type="submit"
+              >
+                <i className="bi bi-save me-2"></i>
+                {initialData ? 'Update' : 'Save'}
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
     </motion.div>
   );
 };

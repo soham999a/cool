@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Member } from '../../types';
-import { Container, Row, Col, Card, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import StatCard from './StatCard';
 import BloodGroupChart from './BloodGroupChart';
 import RecentMembersList from './RecentMembersList';

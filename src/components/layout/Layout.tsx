@@ -106,8 +106,7 @@ const Layout = ({ children }: LayoutProps) => {
               </Dropdown>
             ) : (
               <Button
-                as={Link}
-                to="/login"
+                onClick={() => navigate('/login')}
                 variant="outline-light"
                 className="btn-gradient-primary d-flex align-items-center"
               >
