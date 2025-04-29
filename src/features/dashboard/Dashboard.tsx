@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Member } from '../../types';
+import { Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import StatCard from './StatCard';
 import BloodGroupChart from './BloodGroupChart';
 import RecentMembersList from './RecentMembersList';
@@ -54,149 +55,172 @@ const Dashboard: React.FC<DashboardProps> = ({ members, isLoading }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="relative">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-pulse"></div>
-          </div>
-        </div>
+      <div className="d-flex justify-content-center align-items-center py-5">
+        <Spinner animation="border" role="status" variant="primary" style={{ width: '3rem', height: '3rem' }}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="d-flex flex-column gap-4">
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="h-full"
-        >
-          <StatCard
-            title="Total Members"
-            value={stats.totalMembers.toString()}
-            icon="people"
-            color="indigo"
-          />
-        </motion.div>
+      <Row className="g-4">
+        <Col xs={12} sm={6} lg={3}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="h-100"
+          >
+            <StatCard
+              title="Total Members"
+              value={stats.totalMembers.toString()}
+              icon="people"
+              color="indigo"
+            />
+          </motion.div>
+        </Col>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          className="h-full"
-        >
-          <StatCard
-            title="New This Month"
-            value={stats.newMembersThisMonth.toString()}
-            icon="person_add"
-            color="purple"
-          />
-        </motion.div>
+        <Col xs={12} sm={6} lg={3}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="h-100"
+          >
+            <StatCard
+              title="New This Month"
+              value={stats.newMembersThisMonth.toString()}
+              icon="person_add"
+              color="purple"
+            />
+          </motion.div>
+        </Col>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
-          className="h-full"
-        >
-          <StatCard
-            title="Most Common Blood Group"
-            value={Object.entries(stats.bloodGroupDistribution).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A'}
-            icon="water_drop"
-            color="pink"
-          />
-        </motion.div>
+        <Col xs={12} sm={6} lg={3}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="h-100"
+          >
+            <StatCard
+              title="Most Common Blood Group"
+              value={Object.entries(stats.bloodGroupDistribution).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A'}
+              icon="water_drop"
+              color="pink"
+            />
+          </motion.div>
+        </Col>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="h-full"
-        >
-          <StatCard
-            title="Last Updated"
-            value={members.length > 0 ? new Date(Math.max(...members.map(m => m.updatedAt))).toLocaleDateString() : 'N/A'}
-            icon="update"
-            color="blue"
-          />
-        </motion.div>
-      </div>
+        <Col xs={12} sm={6} lg={3}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+            className="h-100"
+          >
+            <StatCard
+              title="Last Updated"
+              value={members.length > 0 ? new Date(Math.max(...members.map(m => m.updatedAt))).toLocaleDateString() : 'N/A'}
+              icon="update"
+              color="blue"
+            />
+          </motion.div>
+        </Col>
+      </Row>
 
       {/* Main Dashboard Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Row className="g-4">
         {/* Blood Group Distribution */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.4 }}
-        >
-          <div className="glass-effect p-6 rounded-xl h-full border border-gray-800">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-white hover:from-pink-400 hover:to-indigo-400 transition-all duration-300">Blood Groups</h2>
-                <p className="text-gray-400 text-sm">Member distribution</p>
-              </div>
-              <div className="bg-gray-800 p-2 rounded-lg transform transition-transform hover:scale-110 hover:rotate-6 duration-300">
-                <span className="material-icons text-pink-400">water_drop</span>
-              </div>
-            </div>
-            <BloodGroupChart distribution={stats.bloodGroupDistribution} />
-          </div>
-        </motion.div>
+        <Col md={6}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
+            className="h-100"
+          >
+            <Card className="card-glass h-100">
+              <Card.Body className="p-4">
+                <div className="d-flex align-items-center justify-content-between mb-4">
+                  <div>
+                    <h5 className="fw-bold text-gradient">Blood Groups</h5>
+                    <p className="text-muted small mb-0">Member distribution</p>
+                  </div>
+                  <div className="bg-dark p-2 rounded">
+                    <i className="bi bi-droplet-fill text-secondary"></i>
+                  </div>
+                </div>
+                <BloodGroupChart distribution={stats.bloodGroupDistribution} />
+              </Card.Body>
+            </Card>
+          </motion.div>
+        </Col>
 
         {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-        >
-          <div className="glass-effect p-6 rounded-xl h-full border border-gray-800">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-white hover:from-indigo-400 hover:to-purple-400 transition-all duration-300">Quick Actions</h2>
-                <p className="text-gray-400 text-sm">Manage your organization</p>
-              </div>
-              <div className="bg-gray-800 p-2 rounded-lg transform transition-transform hover:scale-110 hover:rotate-6 duration-300">
-                <span className="material-icons text-indigo-400">bolt</span>
-              </div>
-            </div>
+        <Col md={6}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+            className="h-100"
+          >
+            <Card className="card-glass h-100">
+              <Card.Body className="p-4">
+                <div className="d-flex align-items-center justify-content-between mb-4">
+                  <div>
+                    <h5 className="fw-bold text-gradient">Quick Actions</h5>
+                    <p className="text-muted small mb-0">Manage your organization</p>
+                  </div>
+                  <div className="bg-dark p-2 rounded">
+                    <i className="bi bi-lightning-charge-fill text-primary"></i>
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <a href="/members" className="glass-effect p-4 rounded-xl border border-gray-700 hover:border-indigo-500 transition-all duration-300 flex flex-col items-center justify-center text-center relative overflow-hidden group transform hover:-translate-y-1 hover:shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="material-icons text-indigo-400 text-2xl mb-2 group-hover:scale-110 transition-transform duration-300 relative z-10">people</span>
-                <span className="text-white font-medium relative z-10">Manage Members</span>
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-indigo-500 to-indigo-600 transition-all duration-300"></div>
-              </a>
+                <Row className="g-3">
+                  <Col xs={6}>
+                    <Card className="card-glass h-100 text-center p-3 cursor-pointer">
+                      <div className="d-flex flex-column align-items-center">
+                        <i className="bi bi-people-fill text-primary fs-4 mb-2"></i>
+                        <span>Manage Members</span>
+                      </div>
+                    </Card>
+                  </Col>
 
-              <a href="/members" className="glass-effect p-4 rounded-xl border border-gray-700 hover:border-pink-500 transition-all duration-300 flex flex-col items-center justify-center text-center relative overflow-hidden group transform hover:-translate-y-1 hover:shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="material-icons text-pink-400 text-2xl mb-2 group-hover:scale-110 transition-transform duration-300 relative z-10">person_add</span>
-                <span className="text-white font-medium relative z-10">Add Member</span>
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-pink-500 to-pink-600 transition-all duration-300"></div>
-              </a>
+                  <Col xs={6}>
+                    <Card className="card-glass h-100 text-center p-3 cursor-pointer">
+                      <div className="d-flex flex-column align-items-center">
+                        <i className="bi bi-person-plus-fill text-secondary fs-4 mb-2"></i>
+                        <span>Add Member</span>
+                      </div>
+                    </Card>
+                  </Col>
 
-              <a href="/payments" className="glass-effect p-4 rounded-xl border border-gray-700 hover:border-purple-500 transition-all duration-300 flex flex-col items-center justify-center text-center relative overflow-hidden group transform hover:-translate-y-1 hover:shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="material-icons text-purple-400 text-2xl mb-2 group-hover:scale-110 transition-transform duration-300 relative z-10">payments</span>
-                <span className="text-white font-medium relative z-10">Payments</span>
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-purple-500 to-purple-600 transition-all duration-300"></div>
-              </a>
+                  <Col xs={6}>
+                    <Card className="card-glass h-100 text-center p-3 cursor-pointer">
+                      <div className="d-flex flex-column align-items-center">
+                        <i className="bi bi-credit-card-fill" style={{ color: 'var(--bs-accent)' }}></i>
+                        <span className="mt-2">Payments</span>
+                      </div>
+                    </Card>
+                  </Col>
 
-              <a href="/support" className="glass-effect p-4 rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-300 flex flex-col items-center justify-center text-center relative overflow-hidden group transform hover:-translate-y-1 hover:shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="material-icons text-blue-400 text-2xl mb-2 group-hover:scale-110 transition-transform duration-300 relative z-10">support</span>
-                <span className="text-white font-medium relative z-10">Get Support</span>
-                <div className="absolute bottom-0 left-0 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300"></div>
-              </a>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+                  <Col xs={6}>
+                    <Card className="card-glass h-100 text-center p-3 cursor-pointer">
+                      <div className="d-flex flex-column align-items-center">
+                        <i className="bi bi-headset text-info fs-4 mb-2"></i>
+                        <span>Get Support</span>
+                      </div>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </motion.div>
+        </Col>
+      </Row>
 
       {/* Recent Members */}
       <motion.div
@@ -204,18 +228,20 @@ const Dashboard: React.FC<DashboardProps> = ({ members, isLoading }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.6 }}
       >
-        <div className="glass-effect p-6 rounded-xl border border-gray-800">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-white hover:from-blue-400 hover:to-indigo-400 transition-all duration-300">Recent Members</h2>
-              <p className="text-gray-400 text-sm">Latest additions to your organization</p>
+        <Card className="card-glass">
+          <Card.Body className="p-4">
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <div>
+                <h5 className="fw-bold text-gradient">Recent Members</h5>
+                <p className="text-muted small mb-0">Latest additions to your organization</p>
+              </div>
+              <div className="bg-dark p-2 rounded">
+                <i className="bi bi-people-fill text-info"></i>
+              </div>
             </div>
-            <div className="bg-gray-800 p-2 rounded-lg transform transition-transform hover:scale-110 hover:rotate-6 duration-300">
-              <span className="material-icons text-indigo-400">people</span>
-            </div>
-          </div>
-          <RecentMembersList members={stats.recentMembers} />
-        </div>
+            <RecentMembersList members={stats.recentMembers} />
+          </Card.Body>
+        </Card>
       </motion.div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 
 interface StatCardProps {
   title: string;
@@ -8,43 +9,76 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
-  const getGradient = () => {
+  const getColor = () => {
     switch (color) {
       case 'indigo':
-        return 'from-indigo-500 to-indigo-600';
+        return 'var(--bs-primary)';
       case 'purple':
-        return 'from-purple-500 to-purple-600';
+        return 'var(--bs-accent)';
       case 'pink':
-        return 'from-pink-500 to-pink-600';
+        return 'var(--bs-secondary)';
       case 'blue':
-        return 'from-blue-500 to-blue-600';
+        return 'var(--bs-info)';
       default:
-        return 'from-indigo-500 to-indigo-600';
+        return 'var(--bs-primary)';
+    }
+  };
+
+  const getIconName = () => {
+    switch (icon) {
+      case 'people':
+        return 'people';
+      case 'person_add':
+        return 'person-plus';
+      case 'water_drop':
+        return 'droplet';
+      case 'update':
+        return 'arrow-clockwise';
+      default:
+        return icon;
     }
   };
 
   return (
-    <div className="glass-effect p-6 relative overflow-hidden group rounded-xl border border-gray-800 h-full">
+    <Card className="card-glass h-100 position-relative overflow-hidden">
       {/* Background glow effect */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div
+        className="position-absolute top-0 start-0 end-0 bottom-0 rounded opacity-0 hover-overlay"
+        style={{
+          background: `linear-gradient(to right, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2))`,
+          filter: 'blur(8px)',
+          transition: 'opacity 0.5s ease'
+        }}
+      ></div>
 
-      <div className="relative flex items-center justify-between">
+      <Card.Body className="d-flex align-items-center justify-content-between p-4">
         <div>
-          <h3 className="text-gray-400 text-sm font-medium mb-1">{title}</h3>
-          <p className="text-white text-2xl font-bold">{value}</p>
+          <h6 className="text-muted mb-1">{title}</h6>
+          <p className="fs-4 fw-bold mb-0">{value}</p>
         </div>
 
-        <div className={`flex-shrink-0 p-3 rounded-lg bg-gradient-to-br ${getGradient()} shadow-lg`}>
-          <span className="material-icons text-white">{icon}</span>
+        <div
+          className="d-flex align-items-center justify-content-center rounded p-3 shadow-sm"
+          style={{
+            background: getColor(),
+            width: '48px',
+            height: '48px'
+          }}
+        >
+          <i className={`bi bi-${getIconName()} text-white`}></i>
         </div>
-      </div>
+      </Card.Body>
 
       {/* Hover indicator */}
-      <div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300"></div>
-
-      {/* Subtle shine effect */}
-      <div className="absolute -inset-x-20 -inset-y-10 w-40 h-40 opacity-0 group-hover:opacity-20 bg-gradient-to-br from-white via-white to-transparent rotate-12 transform-gpu transition-opacity duration-700"></div>
-    </div>
+      <div
+        className="position-absolute bottom-0 start-0 w-0 hover-indicator"
+        style={{
+          height: '3px',
+          background: 'linear-gradient(to right, var(--bs-primary), var(--bs-accent))',
+          transition: 'width 0.3s ease'
+        }}
+      ></div>
+    </Card>
   );
 };
 

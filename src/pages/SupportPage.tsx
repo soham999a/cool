@@ -1,6 +1,6 @@
 import Layout from '../components/layout/Layout';
 import { motion } from 'framer-motion';
-import { FiHeadphones, FiMessageCircle, FiMail, FiPhone } from 'react-icons/fi';
+import { Card, Button, Row, Col, Accordion } from 'react-bootstrap';
 
 const SupportPage = () => {
   const supportOptions = [
@@ -8,115 +8,131 @@ const SupportPage = () => {
       id: 'chat',
       title: 'Live Chat',
       description: 'Chat with our support team in real-time',
-      icon: <FiMessageCircle className="text-3xl text-white" />,
-      color: 'from-purple-500 to-indigo-600',
+      icon: 'chat-dots-fill',
+      color: 'primary',
       action: 'Start Chat',
     },
     {
       id: 'email',
       title: 'Email Support',
       description: 'Send us an email and we will respond within 24 hours',
-      icon: <FiMail className="text-3xl text-white" />,
-      color: 'from-blue-500 to-cyan-600',
+      icon: 'envelope-fill',
+      color: 'info',
       action: 'Send Email',
     },
     {
       id: 'phone',
       title: 'Phone Support',
       description: 'Call our dedicated support line for immediate assistance',
-      icon: <FiPhone className="text-3xl text-white" />,
-      color: 'from-green-500 to-teal-600',
+      icon: 'telephone-fill',
+      color: 'success',
       action: 'Call Now',
     },
   ];
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-12">
+      <div className="mb-4">
+        <div className="d-flex align-items-center mb-4">
+          <div className="me-3 rounded-circle bg-secondary d-flex align-items-center justify-content-center"
+               style={{ width: '48px', height: '48px' }}>
+            <i className="bi bi-headset text-white fs-4"></i>
+          </div>
+          <div>
+            <h1 className="fw-bold mb-0">
+              <span className="text-gradient">Support</span>
+            </h1>
+            <p className="text-muted mb-0">Get help with your account and technical issues</p>
+          </div>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="text-center mb-5"
         >
-          <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center mx-auto mb-6">
-            <FiHeadphones className="text-3xl text-white" />
-          </div>
-
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            IT Support
-          </h1>
-
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="lead text-light opacity-75 mx-auto" style={{ maxWidth: '700px' }}>
             Need help? Our support team is ready to assist you with any technical issues.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <Row className="g-4 mb-5">
           {supportOptions.map((option, index) => (
-            <motion.div
-              key={option.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card flex flex-col items-center text-center p-8"
-            >
-              <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${option.color} flex items-center justify-center mb-4`}>
-                {option.icon}
-              </div>
+            <Col key={option.id} md={4}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Card className="card-glass h-100 text-center">
+                  <Card.Body className="p-4 d-flex flex-column">
+                    <div className={`rounded-circle bg-${option.color} d-flex align-items-center justify-content-center mx-auto mb-3`}
+                         style={{ width: '70px', height: '70px' }}>
+                      <i className={`bi bi-${option.icon} text-white fs-3`}></i>
+                    </div>
 
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                {option.title}
-              </h2>
+                    <h3 className="fw-bold mb-2">
+                      {option.title}
+                    </h3>
 
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {option.description}
-              </p>
+                    <p className="text-muted mb-4">
+                      {option.description}
+                    </p>
 
-              <button className="btn-primary mt-auto">
-                {option.action}
-              </button>
-            </motion.div>
+                    <Button variant={option.color} className="mt-auto">
+                      {option.action}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </motion.div>
+            </Col>
           ))}
-        </div>
+        </Row>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-16 bg-white dark:bg-dark-800 rounded-xl shadow-lg p-8 max-w-3xl mx-auto"
+          className="row justify-content-center"
         >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Frequently Asked Questions
-          </h2>
+          <div className="col-lg-8">
+            <Card className="card-glass">
+              <Card.Body className="p-4">
+                <h2 className="fw-bold mb-4 text-center">
+                  Frequently Asked Questions
+                </h2>
 
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                How do I add a new member?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Navigate to the Members page and click on the "Add Member" button. Fill in the required information and click "Save".
-              </p>
-            </div>
+                <Accordion defaultActiveKey="0" className="accordion-dark">
+                  <Accordion.Item eventKey="0" className="mb-3 bg-transparent border-secondary">
+                    <Accordion.Header>
+                      How do I add a new member?
+                    </Accordion.Header>
+                    <Accordion.Body className="text-light-emphasis">
+                      Navigate to the Members page and click on the "Add Member" button. Fill in the required information and click "Save".
+                    </Accordion.Body>
+                  </Accordion.Item>
 
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                Can I export member data?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Yes, you can export member data in CSV or PDF format. Go to the Members page and click on the "Export" button.
-              </p>
-            </div>
+                  <Accordion.Item eventKey="1" className="mb-3 bg-transparent border-secondary">
+                    <Accordion.Header>
+                      Can I export member data?
+                    </Accordion.Header>
+                    <Accordion.Body className="text-light-emphasis">
+                      Yes, you can export member data in CSV or PDF format. Go to the Members page and click on the "Export" button.
+                    </Accordion.Body>
+                  </Accordion.Item>
 
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                How do I reset my password?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Click on the "Forgot Password" link on the login page and follow the instructions sent to your email.
-              </p>
-            </div>
+                  <Accordion.Item eventKey="2" className="mb-3 bg-transparent border-secondary">
+                    <Accordion.Header>
+                      How do I reset my password?
+                    </Accordion.Header>
+                    <Accordion.Body className="text-light-emphasis">
+                      Click on the "Forgot Password" link on the login page and follow the instructions sent to your email.
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              </Card.Body>
+            </Card>
           </div>
         </motion.div>
       </div>

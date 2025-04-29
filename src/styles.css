@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
+/* Custom Variables */
 :root {
   /* Bootstrap theme colors */
   --bs-primary: #6366f1;
@@ -42,27 +41,11 @@
   --glass-backdrop-filter: blur(10px);
   --dark-glass-background: rgba(17, 24, 39, 0.7);
   --dark-glass-border: rgba(255, 255, 255, 0.1);
-
-  /* Typography */
-  --bs-body-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  --bs-heading-font-family: 'Poppins', var(--bs-body-font-family);
-
-  /* Border radius */
-  --bs-border-radius: 0.375rem;
-  --bs-border-radius-sm: 0.25rem;
-  --bs-border-radius-lg: 0.5rem;
-  --bs-border-radius-xl: 0.75rem;
-  --bs-border-radius-2xl: 1rem;
-  --bs-border-radius-pill: 50rem;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Base Styles */
 body {
-  font-family: var(--bs-body-font-family);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--bs-dark);
   background-image:
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
@@ -71,24 +54,13 @@ body {
     radial-gradient(at 0% 100%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
   color: var(--bs-light);
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--bs-heading-font-family);
   font-weight: 700;
   letter-spacing: -0.025em;
-  line-height: 1.2;
-}
-
-a {
-  color: var(--bs-primary-light);
-  text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-a:hover {
-  color: var(--bs-accent-light);
 }
 
 /* Custom Bootstrap Overrides */
@@ -103,6 +75,7 @@ a:hover {
 .btn-gradient-primary:hover {
   background-image: linear-gradient(135deg, var(--bs-primary-dark), var(--bs-accent-dark));
   transform: translateY(-2px);
+  color: white;
 }
 
 .btn-gradient-primary:active {
@@ -120,6 +93,7 @@ a:hover {
 .btn-gradient-secondary:hover {
   background-image: linear-gradient(135deg, var(--bs-secondary-dark), var(--bs-accent-dark));
   transform: translateY(-2px);
+  color: white;
 }
 
 .btn-glass {
@@ -133,12 +107,13 @@ a:hover {
 .btn-glass:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: var(--bs-primary-light);
+  color: white;
 }
 
 /* Custom Card Styles */
 .card-dark {
   background-color: var(--bs-dark-lighter);
-  border-radius: var(--bs-border-radius-xl);
+  border-radius: 0.75rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--bs-dark-lightest);
   transition: all 0.3s ease;
@@ -154,19 +129,21 @@ a:hover {
   background-color: var(--dark-glass-background);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--bs-border-radius-xl);
+  border-radius: 0.75rem;
   border: 1px solid var(--dark-glass-border);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .card-glass:hover {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border-color: var(--bs-primary);
+  transform: translateY(-4px);
 }
 
 .card-gradient {
   background-image: var(--gradient-dark);
-  border-radius: var(--bs-border-radius-xl);
+  border-radius: 0.75rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   position: relative;
@@ -215,6 +192,7 @@ a:hover {
   background-color: rgba(31, 41, 55, 0.7);
   border-color: var(--bs-primary-light);
   box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+  color: var(--bs-light);
 }
 
 /* Glassmorphism */
@@ -223,26 +201,7 @@ a:hover {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--dark-glass-border);
-  border-radius: var(--bs-border-radius-lg);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bs-dark-lighter);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(75, 85, 99, 0.8);
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 0.8);
+  border-radius: 0.5rem;
 }
 
 /* Text gradient */
@@ -282,58 +241,39 @@ a:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Dark mode overrides for Bootstrap components */
-.navbar-dark {
-  background-color: var(--bs-dark);
-  border-bottom: 1px solid var(--dark-glass-border);
+/* Feature Icons */
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.dropdown-menu-dark {
-  background-color: var(--bs-dark-lighter);
-  border: 1px solid var(--dark-glass-border);
+/* Navbar Customization */
+.navbar {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.modal-dark .modal-content {
-  background-color: var(--bs-dark-lighter);
-  border: 1px solid var(--dark-glass-border);
-  color: var(--bs-light);
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
 }
 
-.modal-dark .modal-header,
-.modal-dark .modal-footer {
-  border-color: var(--dark-glass-border);
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.modal-dark .btn-close {
-  filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-/* Custom hover effects */
-.card-glass {
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-glass:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
-}
-
-.card-glass:hover .hover-overlay {
-  opacity: 1 !important;
-}
-
-.card-glass:hover .rounded-circle {
-  transform: scale(1.1);
-}
-
-.card-glass:hover .position-absolute.bottom-0 {
-  transform: scaleX(1) !important;
-}
-
-/* Cursor pointer utility */
-.cursor-pointer {
-  cursor: pointer;
+.navbar-dark .navbar-nav .nav-link.active {
+  color: white;
+  background-color: rgba(99, 102, 241, 0.2);
 }
 
 /* Button shine effect */
@@ -347,45 +287,30 @@ a:hover {
   100% { transform: translateX(100%); opacity: 0; }
 }
 
-/* StatCard hover effects */
-.card-glass:hover .hover-overlay {
-  opacity: 1 !important;
+/* Custom Accordion Styling */
+.accordion-dark .accordion-button {
+  background-color: var(--bs-dark-lighter);
+  color: var(--bs-light);
+  border: none;
+  box-shadow: none;
+  padding: 1rem 1.25rem;
 }
 
-.card-glass:hover .hover-indicator {
-  width: 100% !important;
+.accordion-dark .accordion-button:not(.collapsed) {
+  background-color: var(--bs-primary);
+  color: white;
 }
 
-/* Member list hover effects */
-.member-item {
-  transform: translateY(0);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+.accordion-dark .accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--bs-primary);
 }
 
-.member-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-color: var(--bs-primary) !important;
-  background-color: rgba(31, 41, 55, 0.7) !important;
+.accordion-dark .accordion-button::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
-.member-item:hover .hover-indicator {
-  opacity: 1 !important;
-}
-
-.member-item:hover .shine-effect {
-  opacity: 1 !important;
-  transform: translateX(100%) !important;
-}
-
-.member-item:hover .rounded-circle {
-  background: linear-gradient(135deg, var(--bs-primary-dark), var(--bs-primary)) !important;
-}
-
-.member-item:hover .bi-person {
-  color: white !important;
-}
-
-.member-item:hover .rounded-circle:last-of-type {
-  transform: scale(1.1) !important;
+.accordion-dark .accordion-body {
+  background-color: var(--bs-dark-lighter);
+  padding: 1rem 1.25rem;
 }

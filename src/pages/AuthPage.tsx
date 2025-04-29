@@ -1,14 +1,29 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import LoginForm from '../components/auth/LoginForm';
 import SignupForm from '../components/auth/SignupForm';
 import { useAuth } from '../context/AuthContext';
 
-const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+interface AuthPageProps {
+  mode?: 'login' | 'signup';
+}
+
+const AuthPage = ({ mode }: AuthPageProps) => {
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(mode === 'signup' ? false : true);
   const { user, status } = useAuth();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Update form mode based on URL changes
+  useEffect(() => {
+    if (location.pathname === '/signup') {
+      setIsLogin(false);
+    } else if (location.pathname === '/login') {
+      setIsLogin(true);
+    }
+  }, [location.pathname]);
 
   // Track mouse position for interactive effects
   useEffect(() => {
@@ -22,17 +37,21 @@ const AuthPage = () => {
 
   // Redirect if already authenticated
   if (status === 'authenticated' && user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center position-relative overflow-hidden">
       {/* Animated background */}
-      <div className="absolute inset-0 bg-dark-900 z-0">
+      <div className="position-absolute top-0 start-0 bottom-0 end-0" style={{ zIndex: 0, background: 'var(--bs-dark)' }}>
         {/* Gradient orbs */}
         <div
-          className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-r from-indigo-600/30 to-purple-600/30 blur-3xl"
+          className="position-absolute rounded-circle"
           style={{
+            width: '500px',
+            height: '500px',
+            background: 'linear-gradient(to right, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3))',
+            filter: 'blur(80px)',
             top: mousePosition.y * 0.1 - 250,
             left: mousePosition.x * 0.1 - 250,
             transform: 'translate3d(0, 0, 0)',
@@ -40,8 +59,12 @@ const AuthPage = () => {
           }}
         />
         <div
-          className="absolute w-[400px] h-[400px] rounded-full bg-gradient-to-r from-pink-600/20 to-purple-600/20 blur-3xl"
+          className="position-absolute rounded-circle"
           style={{
+            width: '400px',
+            height: '400px',
+            background: 'linear-gradient(to right, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+            filter: 'blur(80px)',
             bottom: mousePosition.y * 0.05,
             right: mousePosition.x * 0.05,
             transform: 'translate3d(0, 0, 0)',
@@ -50,93 +73,135 @@ const AuthPage = () => {
         />
 
         {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHYtMXptMC0yaDF2NGgtMXYtNHptMi0yaDF2MWgtMXYtMXptLTIgMmgxdjFoLTF2LTF6bS0yLTJoMXYxaC0xdi0xem0yLTJoMXYxaC0xdi0xem0tMiAyaDF2MWgtMXYtMXptLTIgMGgxdjFoLTF2LTF6TTM0IDI4aDR2MWgtNHYtMXptMCAyaDR2MWgtNHYtMXptLTIgMGg0djFoLTR2LTF6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
+        <div className="position-absolute top-0 start-0 bottom-0 end-0"
+             style={{
+               background: 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0aDR2MWgtNHYtMXptMC0yaDF2NGgtMXYtNHptMi0yaDF2MWgtMXYtMXptLTIgMmgxdjFoLTF2LTF6bS0yLTJoMXYxaC0xdi0xem0yLTJoMXYxaC0xdi0xem0tMiAyaDF2MWgtMXYtMXptLTIgMGgxdjFoLTF2LTF6TTM0IDI4aDR2MWgtNHYtMXptMCAyaDR2MWgtNHYtMXptLTIgMGg0djFoLTR2LTF6Ii8+PC9nPjwvZz48L3N2Zz4=")',
+               opacity: 0.2
+             }} />
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="w-full md:w-1/2 mb-12 md:mb-0 text-center md:text-left"
-        >
-          <div className="inline-block h-20 w-20 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center mb-6 mx-auto md:mx-0">
-            <span className="text-white font-bold text-3xl">CM</span>
-          </div>
-
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="text-white">Cool</span>
-            <span className="text-gradient">Member</span>
-          </h1>
-
-          <p className="text-xl text-gray-300 max-w-lg mb-8">
-            Manage your organization with our modern, intuitive platform. Streamlined member management for the digital age.
-          </p>
-
-          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-            <div className="flex items-center bg-dark-lighter rounded-full px-4 py-2">
-              <span className="material-icons text-indigo-400 mr-2">check_circle</span>
-              <span className="text-gray-300">Modern Dashboard</span>
-            </div>
-            <div className="flex items-center bg-dark-lighter rounded-full px-4 py-2">
-              <span className="material-icons text-pink-400 mr-2">check_circle</span>
-              <span className="text-gray-300">Member Management</span>
-            </div>
-            <div className="flex items-center bg-dark-lighter rounded-full px-4 py-2">
-              <span className="material-icons text-purple-400 mr-2">check_circle</span>
-              <span className="text-gray-300">Secure Access</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="w-full md:w-5/12"
-        >
-          <div className="relative">
-            {/* Decorative elements */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/10 rounded-full blur-xl"></div>
-
-            {/* Card with glow effect */}
-            <div className="relative glass-card p-8 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden">
-              {/* Top accent */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
-
-              {/* Animated glow */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-1000 animate-pulse"></div>
-
-              <div className="relative">
-                <h2 className="text-3xl font-bold text-center mb-6 text-gradient">
-                  {isLogin ? 'Welcome Back' : 'Create Account'}
-                </h2>
-
-                <AnimatePresence mode="wait">
-                  {isLogin ? (
-                    <LoginForm key="login" />
-                  ) : (
-                    <SignupForm key="signup" />
-                  )}
-                </AnimatePresence>
-
-                <div className="mt-6 text-center">
-                  <p className="text-gray-400">
-                    {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <button
-                      onClick={() => setIsLogin(!isLogin)}
-                      className="ml-2 text-indigo-400 font-medium hover:text-indigo-300 focus:outline-none transition-colors"
-                    >
-                      {isLogin ? "Sign up" : "Sign in"}
-                    </button>
-                  </p>
-                </div>
+      <Container className="position-relative py-5" style={{ zIndex: 10 }}>
+        <Row className="align-items-center justify-content-between g-5">
+          <Col md={6} className="text-center text-md-start">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 mx-auto mx-md-0"
+                   style={{
+                     width: '80px',
+                     height: '80px',
+                     background: 'linear-gradient(135deg, var(--bs-primary), var(--bs-accent), var(--bs-secondary))'
+                   }}>
+                <span className="text-white fw-bold fs-3">CM</span>
               </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+
+              <h1 className="display-4 fw-bold mb-4">
+                <span className="text-white">Cool</span>
+                <span className="text-gradient">Member</span>
+              </h1>
+
+              <p className="fs-5 text-light opacity-75 mb-4" style={{ maxWidth: '500px' }}>
+                Manage your organization with our modern, intuitive platform. Streamlined member management for the digital age.
+              </p>
+
+              <div className="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                <Badge bg="dark" className="py-2 px-3 d-flex align-items-center" style={{ background: 'rgba(31, 41, 55, 0.8)' }}>
+                  <i className="bi bi-check-circle-fill text-primary me-2"></i>
+                  <span>Modern Dashboard</span>
+                </Badge>
+                <Badge bg="dark" className="py-2 px-3 d-flex align-items-center" style={{ background: 'rgba(31, 41, 55, 0.8)' }}>
+                  <i className="bi bi-check-circle-fill text-secondary me-2"></i>
+                  <span>Member Management</span>
+                </Badge>
+                <Badge bg="dark" className="py-2 px-3 d-flex align-items-center" style={{ background: 'rgba(31, 41, 55, 0.8)' }}>
+                  <i className="bi bi-check-circle-fill" style={{ color: 'var(--bs-accent)' }}></i>
+                  <span className="ms-2">Secure Access</span>
+                </Badge>
+              </div>
+            </motion.div>
+          </Col>
+
+          <Col md={5}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            >
+              <div className="position-relative">
+                {/* Decorative elements */}
+                <div className="position-absolute"
+                     style={{
+                       top: '-40px',
+                       right: '-40px',
+                       width: '160px',
+                       height: '160px',
+                       background: 'rgba(99, 102, 241, 0.1)',
+                       borderRadius: '50%',
+                       filter: 'blur(40px)'
+                     }}></div>
+                <div className="position-absolute"
+                     style={{
+                       bottom: '-40px',
+                       left: '-40px',
+                       width: '160px',
+                       height: '160px',
+                       background: 'rgba(236, 72, 153, 0.1)',
+                       borderRadius: '50%',
+                       filter: 'blur(40px)'
+                     }}></div>
+
+                {/* Card with glow effect */}
+                <Card className="card-glass border-secondary shadow-lg overflow-hidden">
+                  {/* Top accent */}
+                  <div className="position-absolute top-0 start-0 end-0"
+                       style={{
+                         height: '4px',
+                         background: 'linear-gradient(to right, var(--bs-primary), var(--bs-accent), var(--bs-secondary))'
+                       }}></div>
+
+                  {/* Animated glow */}
+                  <div className="position-absolute top-0 start-0 end-0 bottom-0 animate-pulse"
+                       style={{
+                         background: 'linear-gradient(to right, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2))',
+                         borderRadius: 'inherit',
+                         filter: 'blur(15px)',
+                         opacity: 0.2,
+                         transform: 'translateY(-1px) scale(1.01)'
+                       }}></div>
+
+                  <Card.Body className="p-4 p-md-5 position-relative">
+                    <h2 className="text-gradient fs-2 fw-bold text-center mb-4">
+                      {isLogin ? 'Welcome Back' : 'Create Account'}
+                    </h2>
+
+                    <AnimatePresence mode="wait">
+                      {isLogin ? (
+                        <LoginForm key="login" />
+                      ) : (
+                        <SignupForm key="signup" />
+                      )}
+                    </AnimatePresence>
+
+                    <div className="mt-4 text-center">
+                      <p className="text-muted">
+                        {isLogin ? "Don't have an account?" : "Already have an account?"}
+                        <button
+                          onClick={() => setIsLogin(!isLogin)}
+                          className="ms-2 btn btn-link text-primary p-0 text-decoration-none"
+                        >
+                          {isLogin ? "Sign up" : "Sign in"}
+                        </button>
+                      </p>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            </motion.div>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

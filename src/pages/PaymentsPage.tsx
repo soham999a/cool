@@ -1,39 +1,65 @@
 import Layout from '../components/layout/Layout';
 import { motion } from 'framer-motion';
-import { FiCreditCard } from 'react-icons/fi';
+import { Card, ProgressBar } from 'react-bootstrap';
 
 const PaymentsPage = () => {
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-12">
+      <div className="mb-4">
+        <div className="d-flex align-items-center mb-4">
+          <div className="me-3 rounded-circle bg-success d-flex align-items-center justify-content-center"
+               style={{ width: '48px', height: '48px' }}>
+            <i className="bi bi-credit-card text-white fs-4"></i>
+          </div>
+          <div>
+            <h1 className="fw-bold mb-0">
+              <span className="text-gradient">Payments</span>
+            </h1>
+            <p className="text-muted mb-0">Manage your organization's financial transactions</p>
+          </div>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-8 max-w-3xl mx-auto text-center"
+          className="row justify-content-center"
         >
-          <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center mx-auto mb-6">
-            <FiCreditCard className="text-3xl text-white" />
+          <div className="col-md-10 col-lg-8">
+            <Card className="card-glass text-center">
+              <Card.Body className="p-5">
+                <div className="rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center mx-auto mb-4"
+                     style={{ width: '80px', height: '80px' }}>
+                  <i className="bi bi-credit-card-fill text-white fs-1"></i>
+                </div>
+
+                <h2 className="fw-bold mb-3">
+                  Payments Feature Coming Soon
+                </h2>
+
+                <p className="text-muted mb-4 mx-auto" style={{ maxWidth: '500px' }}>
+                  We're working hard to bring you a comprehensive payment management system.
+                  This feature will allow you to track payments, generate invoices, and manage financial records.
+                </p>
+
+                <div className="mb-2">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                  >
+                    <ProgressBar
+                      now={70}
+                      variant="success"
+                      style={{ height: '10px' }}
+                      className="mb-2"
+                    />
+                  </motion.div>
+                </div>
+                <p className="text-muted small">Development progress: 70%</p>
+              </Card.Body>
+            </Card>
           </div>
-          
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Payments Feature Coming Soon
-          </h1>
-          
-          <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-lg mx-auto">
-            We're working hard to bring you a comprehensive payment management system. 
-            This feature will allow you to track payments, generate invoices, and manage financial records.
-          </p>
-          
-          <div className="w-full h-4 bg-gray-200 dark:bg-dark-700 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: '70%' }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="h-full bg-gradient-to-r from-green-500 to-emerald-600"
-            />
-          </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Development progress: 70%</p>
         </motion.div>
       </div>
     </Layout>

@@ -275,22 +275,35 @@ const MembersPage = () => {
 
   return (
     <Layout>
-      {/* Firebase connection test component */}
-      <FirebaseTest />
-
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-          <p>{error}</p>
+        <div className="alert alert-danger mb-4">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          {error}
         </div>
       )}
 
-      <MemberList
-        members={members}
-        onAddMember={handleAddMember}
-        onUpdateMember={handleUpdateMember}
-        onDeleteMember={handleDeleteMember}
-        isLoading={isLoading}
-      />
+      <div className="mb-4">
+        <div className="d-flex align-items-center mb-4">
+          <div className="me-3 rounded-circle bg-info d-flex align-items-center justify-content-center"
+               style={{ width: '48px', height: '48px' }}>
+            <i className="bi bi-people text-white fs-4"></i>
+          </div>
+          <div>
+            <h1 className="fw-bold mb-0">
+              <span className="text-gradient">Members</span>
+            </h1>
+            <p className="text-muted mb-0">Manage your organization's members</p>
+          </div>
+        </div>
+
+        <MemberList
+          members={members}
+          onAddMember={handleAddMember}
+          onUpdateMember={handleUpdateMember}
+          onDeleteMember={handleDeleteMember}
+          isLoading={isLoading}
+        />
+      </div>
     </Layout>
   );
 };

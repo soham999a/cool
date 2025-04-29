@@ -116,21 +116,23 @@ const DashboardPage = () => {
   return (
     <Layout>
       {error && (
-        <div className="bg-red-900/50 border-l-4 border-red-500 text-red-100 p-4 mb-6 rounded-lg">
-          <p>{error}</p>
+        <div className="alert alert-danger mb-4">
+          <i className="bi bi-exclamation-triangle-fill me-2"></i>
+          {error}
         </div>
       )}
 
-      <div className="mb-8">
-        <div className="flex items-center mb-6">
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-3 rounded-lg mr-4 shadow-lg">
-            <span className="material-icons text-white text-2xl">dashboard</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center mb-4">
+          <div className="me-3 rounded-circle bg-primary d-flex align-items-center justify-content-center"
+               style={{ width: '48px', height: '48px' }}>
+            <i className="bi bi-speedometer2 text-white fs-4"></i>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center">
+            <h1 className="fw-bold mb-0">
               <span className="text-gradient">Dashboard</span>
             </h1>
-            <p className="text-gray-400 text-sm mt-1">Overview of your organization</p>
+            <p className="text-muted mb-0">Overview of your organization</p>
           </div>
         </div>
 

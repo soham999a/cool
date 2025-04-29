@@ -1,21 +1,24 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
-import { FiMail, FiLock, FiUser, FiUserPlus } from 'react-icons/fi';
+import { Form, Button, InputGroup, Alert, Spinner } from 'react-bootstrap';
 
 const SignupForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const { signUp, error } = useAuth();
+  const { signUp, error, clearError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
+    clearError();
 
     if (!name || !email || !password || !confirmPassword) {
       setFormError('Please fill in all fields');
@@ -37,6 +40,7 @@ const SignupForm = () => {
       await signUp(email, password, name);
     } catch (err) {
       // Error is handled by the auth context
+      console.log('Signup error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -48,119 +52,150 @@ const SignupForm = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="w-full"
+      className="w-100"
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <Form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
         {/* Name field */}
-        <div className="relative group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiUser className="text-indigo-400 group-focus-within:text-indigo-300 transition-colors" />
-          </div>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full bg-dark-lightest/50 border border-gray-700 rounded-lg py-3 px-4 pl-10 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200"
-            placeholder="Full Name"
-            autoComplete="name"
-          />
-          <div className="absolute inset-0 rounded-lg border border-indigo-500/0 group-focus-within:border-indigo-500/50 pointer-events-none transition-colors"></div>
-        </div>
+        <Form.Group>
+          <InputGroup>
+            <InputGroup.Text className="bg-transparent border-end-0">
+              <i className="bi bi-person text-primary"></i>
+            </InputGroup.Text>
+            <Form.Control
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full Name"
+              autoComplete="name"
+              className="form-control-dark border-start-0"
+              required
+            />
+          </InputGroup>
+        </Form.Group>
 
         {/* Email field */}
-        <div className="relative group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiMail className="text-indigo-400 group-focus-within:text-indigo-300 transition-colors" />
-          </div>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-dark-lightest/50 border border-gray-700 rounded-lg py-3 px-4 pl-10 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200"
-            placeholder="Email Address"
-            autoComplete="email"
-          />
-          <div className="absolute inset-0 rounded-lg border border-indigo-500/0 group-focus-within:border-indigo-500/50 pointer-events-none transition-colors"></div>
-        </div>
+        <Form.Group>
+          <InputGroup>
+            <InputGroup.Text className="bg-transparent border-end-0">
+              <i className="bi bi-envelope text-primary"></i>
+            </InputGroup.Text>
+            <Form.Control
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email Address"
+              autoComplete="email"
+              className="form-control-dark border-start-0"
+              required
+            />
+          </InputGroup>
+        </Form.Group>
 
         {/* Password field */}
-        <div className="relative group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiLock className="text-indigo-400 group-focus-within:text-indigo-300 transition-colors" />
-          </div>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-dark-lightest/50 border border-gray-700 rounded-lg py-3 px-4 pl-10 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200"
-            placeholder="Password (min. 6 characters)"
-            autoComplete="new-password"
-          />
-          <div className="absolute inset-0 rounded-lg border border-indigo-500/0 group-focus-within:border-indigo-500/50 pointer-events-none transition-colors"></div>
-        </div>
+        <Form.Group>
+          <InputGroup>
+            <InputGroup.Text className="bg-transparent border-end-0">
+              <i className="bi bi-lock text-primary"></i>
+            </InputGroup.Text>
+            <Form.Control
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password (min. 6 characters)"
+              autoComplete="new-password"
+              className="form-control-dark border-start-0 border-end-0"
+              required
+            />
+            <Button
+              variant="dark"
+              className="border border-start-0"
+              onClick={() => setShowPassword(!showPassword)}
+              type="button"
+            >
+              <i className={`bi bi-${showPassword ? 'eye-slash' : 'eye'}`}></i>
+            </Button>
+          </InputGroup>
+        </Form.Group>
 
         {/* Confirm Password field */}
-        <div className="relative group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiLock className="text-indigo-400 group-focus-within:text-indigo-300 transition-colors" />
-          </div>
-          <input
-            id="confirmPassword"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full bg-dark-lightest/50 border border-gray-700 rounded-lg py-3 px-4 pl-10 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200"
-            placeholder="Confirm Password"
-            autoComplete="new-password"
-          />
-          <div className="absolute inset-0 rounded-lg border border-indigo-500/0 group-focus-within:border-indigo-500/50 pointer-events-none transition-colors"></div>
-        </div>
+        <Form.Group>
+          <InputGroup>
+            <InputGroup.Text className="bg-transparent border-end-0">
+              <i className="bi bi-lock-fill text-primary"></i>
+            </InputGroup.Text>
+            <Form.Control
+              id="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              autoComplete="new-password"
+              className="form-control-dark border-start-0 border-end-0"
+              required
+            />
+            <Button
+              variant="dark"
+              className="border border-start-0"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              type="button"
+            >
+              <i className={`bi bi-${showConfirmPassword ? 'eye-slash' : 'eye'}`}></i>
+            </Button>
+          </InputGroup>
+        </Form.Group>
 
         {/* Error message */}
         {(formError || error) && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-400 text-sm font-medium"
           >
-            <div className="flex items-start">
-              <span className="material-icons text-red-400 mr-2 text-base">error_outline</span>
+            <Alert variant="danger" className="d-flex align-items-center py-2">
+              <i className="bi bi-exclamation-circle me-2"></i>
               <span>{formError || error}</span>
-            </div>
+            </Alert>
           </motion.div>
         )}
 
         {/* Submit button */}
-        <div className="pt-2">
-          <button
+        <div className="mt-2">
+          <Button
             type="submit"
             disabled={isLoading}
-            className="relative w-full overflow-hidden group bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-[1px] rounded-lg"
+            className="w-100 btn-gradient-primary position-relative overflow-hidden"
+            style={{ height: '48px' }}
           >
-            <div className="relative bg-dark-lighter rounded-lg group-hover:bg-transparent transition-colors duration-200 py-3 flex items-center justify-center">
-              {isLoading ? (
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              ) : (
-                <span className="flex items-center text-white font-medium">
-                  <FiUserPlus className="mr-2" />
-                  Create Account
-                </span>
-              )}
+            {isLoading ? (
+              <Spinner animation="border" size="sm" role="status" aria-hidden="true">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            ) : (
+              <span className="d-flex align-items-center justify-content-center">
+                <i className="bi bi-person-plus me-2"></i>
+                Create Account
+              </span>
+            )}
 
-              {/* Button shine effect */}
-              <div className="absolute inset-0 overflow-hidden rounded-lg">
-                <div className="absolute -inset-[100%] z-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:animate-[shine_1.5s_ease]"></div>
-              </div>
+            {/* Button shine effect */}
+            <div className="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
+              <div
+                className="position-absolute shine-effect"
+                style={{
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  transform: 'translateX(-100%)',
+                  background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)'
+                }}
+              ></div>
             </div>
-          </button>
+          </Button>
         </div>
-      </form>
+      </Form>
     </motion.div>
   );
 };
