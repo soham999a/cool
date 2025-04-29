@@ -239,10 +239,15 @@ interface MenuItemProps {
 
 const MenuItem = ({ item }: MenuItemProps) => {
   const navigate = useNavigate();
+  // Create a local variable for the framer-motion variants to avoid type conflict
+  const itemVariant = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
 
   return (
     <motion.div
-      variants={item}
+      variants={itemVariant}
       whileHover={{
         y: -5,
         transition: { duration: 0.2 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import MemberList from '../components/member/MemberList';
-import FirebaseTest from '../components/FirebaseTest';
 import { useAuth } from '../context/AuthContext';
 import { Member } from '../types';
 import {
@@ -13,7 +12,6 @@ import {
   getDocs,
   query,
   where,
-  orderBy,
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
@@ -298,9 +296,15 @@ const MembersPage = () => {
 
         <MemberList
           members={members}
-          onAddMember={handleAddMember}
-          onUpdateMember={handleUpdateMember}
-          onDeleteMember={handleDeleteMember}
+          onAddMember={async (data) => {
+            await handleAddMember(data);
+          }}
+          onUpdateMember={async (id, data) => {
+            await handleUpdateMember(id, data);
+          }}
+          onDeleteMember={async (id) => {
+            await handleDeleteMember(id);
+          }}
           isLoading={isLoading}
         />
       </div>
