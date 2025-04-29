@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiPlus, FiUsers } from 'react-icons/fi';
+import { Button, Form, Card, InputGroup } from 'react-bootstrap';
 import MemberForm from './MemberForm';
 import { Member } from '../../types';
-import Card3D from '../3d/Card3D';
-import Button3D from '../3d/Button3D';
-import Input3D from '../3d/Input3D';
 
 interface MemberListProps {
   members: Member[];
@@ -47,42 +44,42 @@ const MemberList = ({
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-        <div className="flex items-center mb-4 md:mb-0">
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-3 rounded-lg mr-4 shadow-lg">
-            <FiUsers className="text-white text-2xl" />
+    <div className="container-fluid">
+      <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between mb-4">
+        <div className="d-flex align-items-center mb-3 mb-md-0">
+          <div className="bg-gradient-primary p-3 rounded-3 me-3 shadow">
+            <i className="bi bi-people-fill text-white fs-4"></i>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center">
+            <h2 className="fw-bold mb-0">
               <span className="text-gradient">Members</span>
-            </h1>
-            <p className="text-gray-400 text-sm mt-1">Manage your organization members</p>
+            </h2>
+            <p className="text-muted small mb-0">Manage your organization members</p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative w-full sm:w-64">
-            <Input3D
+        <div className="d-flex flex-column flex-sm-row gap-3">
+          <InputGroup>
+            <InputGroup.Text>
+              <i className="bi bi-search"></i>
+            </InputGroup.Text>
+            <Form.Control
               id="search"
               name="search"
-              label="Search members"
+              placeholder="Search members"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              icon="search"
             />
-          </div>
+          </InputGroup>
 
-          <div className="self-end">
-            <Button3D
-              onClick={() => setShowAddForm(true)}
-              color="primary"
-              icon="add"
-              size="md"
-            >
-              Add Member
-            </Button3D>
-          </div>
+          <Button
+            variant="primary"
+            onClick={() => setShowAddForm(true)}
+            className="align-self-end"
+          >
+            <i className="bi bi-plus-lg me-2"></i>
+            Add Member
+          </Button>
         </div>
       </div>
 
@@ -118,16 +115,13 @@ const MemberList = ({
       </AnimatePresence>
 
       {isLoading ? (
-        <div className="flex justify-center items-center py-12">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-pulse"></div>
-            </div>
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       ) : filteredMembers.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="row g-4">
           {filteredMembers.map((member, index) => (
             <motion.div
               key={member.id}
@@ -135,13 +129,58 @@ const MemberList = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="h-full"
+              className="col-12 col-sm-6 col-lg-4"
             >
-              <Card3D
-                member={member}
-                onEdit={setEditingMember}
-                onDelete={handleDeleteMember}
-              />
+              <Card className="card-glass h-100">
+                <Card.Body>
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="rounded-circle d-flex align-items-center justify-content-center me-3"
+                         style={{
+                           width: '40px',
+                           height: '40px',
+                           backgroundColor: 'var(--bs-primary)'
+                         }}>
+                      <i className="bi bi-person-fill text-white"></i>
+                    </div>
+                    <div>
+                      <h5 className="mb-0 fw-bold">{member.name}</h5>
+                      <p className="text-muted small mb-0">{member.memberId}</p>
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="d-flex align-items-center mb-2">
+                      <i className="bi bi-telephone me-2 text-muted"></i>
+                      <span>{member.phoneNumber}</span>
+                    </div>
+                    <div className="d-flex align-items-center mb-2">
+                      <i className="bi bi-geo-alt me-2 text-muted"></i>
+                      <span>{member.address}</span>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <i className="bi bi-droplet-fill me-2 text-danger"></i>
+                      <span>{member.bloodGroup}</span>
+                    </div>
+                  </div>
+
+                  <div className="d-flex gap-2 mt-3">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => setEditingMember(member)}
+                    >
+                      <i className="bi bi-pencil me-1"></i> Edit
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => handleDeleteMember(member)}
+                    >
+                      <i className="bi bi-trash me-1"></i> Delete
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
             </motion.div>
           ))}
         </div>
@@ -149,51 +188,54 @@ const MemberList = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="glass-effect p-10 text-center max-w-2xl mx-auto"
+          className="card-glass p-5 text-center mx-auto"
+          style={{ maxWidth: '600px' }}
         >
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-gray-800 flex items-center justify-center">
-                <FiUsers className="text-indigo-400 text-4xl" />
+          <div className="d-flex justify-content-center mb-4">
+            <div className="position-relative">
+              <div className="rounded-circle bg-dark d-flex align-items-center justify-content-center"
+                   style={{ width: '80px', height: '80px' }}>
+                <i className="bi bi-people-fill text-primary fs-1"></i>
               </div>
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg">
+              <div className="position-absolute bottom-0 end-0 rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center shadow"
+                   style={{ width: '30px', height: '30px' }}>
                 {searchTerm ? (
-                  <span className="material-icons text-white text-sm">search_off</span>
+                  <i className="bi bi-search text-white small"></i>
                 ) : (
-                  <span className="material-icons text-white text-sm">add</span>
+                  <i className="bi bi-plus text-white small"></i>
                 )}
               </div>
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-white mb-3">
+          <h3 className="fw-bold mb-3">
             {searchTerm ? 'No members found' : 'No members yet'}
           </h3>
 
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">
+          <p className="text-muted mb-4 mx-auto" style={{ maxWidth: '400px' }}>
             {searchTerm
               ? `We couldn't find any members matching "${searchTerm}". Try a different search term or clear the search.`
               : "Your organization doesn't have any members yet. Get started by adding your first member to the system."}
           </p>
 
           {!searchTerm ? (
-            <Button3D
+            <Button
+              variant="primary"
               onClick={() => setShowAddForm(true)}
-              color="primary"
-              icon="add"
-              size="lg"
+              className="px-4"
             >
+              <i className="bi bi-plus-lg me-2"></i>
               Add Your First Member
-            </Button3D>
+            </Button>
           ) : (
-            <Button3D
+            <Button
+              variant="secondary"
               onClick={() => setSearchTerm('')}
-              color="secondary"
-              icon="clear"
-              size="md"
+              className="px-4"
             >
+              <i className="bi bi-x-lg me-2"></i>
               Clear Search
-            </Button3D>
+            </Button>
           )}
         </motion.div>
       )}
